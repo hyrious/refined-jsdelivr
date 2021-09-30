@@ -11,6 +11,7 @@
 
 - highlight source codes
 - render markdown
+- show terser size of js files
 
 ## License
 
