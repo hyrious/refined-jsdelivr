@@ -91,7 +91,6 @@
   function applyTerser() {
     let count = 0;
     for (const tr of $$('tbody tr')) {
-      if (count++ >= 10) break;
 
       let name = tr.querySelector('td.name');
       let size = tr.querySelector('td.size');
@@ -107,6 +106,8 @@
             size.append(` (terser: ${prettyBytes(min.code.length)})`);
           } catch {}
         })();
+
+        if (count++ >= 10) break;
       }
     }
   }
