@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name        Refined jsDelivr
 // @namespace   hyrious.jsdelivr.refined
+// @downloadURL https://cdn.jsdelivr.net/gh/hyrious/refined-jsdelivr@main/refined-jsdelivr.user.js
 // @match       *://cdn.jsdelivr.net/*
 // @require     https://cdn.jsdelivr.net/npm/marked@latest/marked.min.js
 // @require     https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js
 // @require     https://cdn.jsdelivr.net/npm/terser@latest/dist/bundle.min.js
 // @grant       none
-// @version     0.1.0
+// @version     0.1.1
 // @author      hyrious
 // @description Adds syntax highlight and markdown rendering to jsDelivr CDN links.
 // ==/UserScript==
@@ -69,6 +70,7 @@
       margin: 0 auto;
     `;
     pre.style.display = 'none';
+    _.body.classList.add('markdown-body');
     _.body.append(article);
   }
 
