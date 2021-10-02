@@ -13,6 +13,16 @@
 - render markdown
 - show terser size of js files
 
+## Changelog
+
+### 0.1.2
+
+- Terser: ignore codes larger than 1MB.
+
+### 0.1.1
+
+- Add `@downloadURL`.
+
 ## License
 
 The Unlicense.

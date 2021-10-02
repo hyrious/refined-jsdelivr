@@ -7,7 +7,7 @@
 // @require     https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js
 // @require     https://cdn.jsdelivr.net/npm/terser@latest/dist/bundle.min.js
 // @grant       none
-// @version     0.1.1
+// @version     0.1.2
 // @author      hyrious
 // @description Adds syntax highlight and markdown rendering to jsDelivr CDN links.
 // ==/UserScript==
@@ -22,8 +22,7 @@
   const $ = e => _.querySelector(e);
   const $$ = e => [..._.querySelectorAll(e)];
   const h = (t, a = {}) => Object.assign(document.createElement(t), a);
-  Array.prototype.last = function() { return this[this.length - 1]; };
-  const terser = (s) => (new TextEncoder().encode(Terser.minify(s).code)).byteLength;
+  const byteLength = s => new TextEncoder().encode(s).byteLength;
   const { default: prettyBytes } = await import("https://jspm.dev/pretty-bytes");
   let ext = location.pathname.match(/\.([^.]+)$/);
   ext && (ext = ext[1]);
@@ -104,8 +103,10 @@
         (async () => {
           try {
             let code =  await fetch(url).then(r => r.text());
+            // if the code is larger than 1 MB, don't calc
+            if (code.length > 1000 * 1000) return;
             let min = await Terser.minify(code);
-            size.append(` (terser: ${prettyBytes(min.code.length)})`);
+            size.append(` (terser: ${prettyBytes(byteLength(min.code))})`);
           } catch {}
         })();
 
