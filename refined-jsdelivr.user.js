@@ -7,7 +7,7 @@
 // @require     https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js
 // @require     https://cdn.jsdelivr.net/npm/terser@latest/dist/bundle.min.js
 // @grant       none
-// @version     0.1.2
+// @version     0.1.3
 // @author      hyrious
 // @description Adds syntax highlight and markdown rendering to jsDelivr CDN links.
 // ==/UserScript==
@@ -27,6 +27,8 @@
   let ext = location.pathname.match(/\.([^.]+)$/);
   ext && (ext = ext[1]);
 
+  if (ext === 'map') ext = 'json';
+
   let executed = new Map()
   function once(fn) {
     if (executed.has(fn)) return executed.get(fn);
@@ -35,15 +37,9 @@
     return result;
   }
 
-  if (Features.markdown) {
-    applyMarkdown();
-  }
-  if (Features.highlight) {
-    applyHighlight();
-  }
-  if (Features.terser) {
-    applyTerser();
-  }
+  Features.markdown  && applyMarkdown();
+  Features.highlight && applyHighlight();
+  Features.terser    && applyTerser();
 
   function applyMarkdown() {
     const pre = once(ensurePRE);
@@ -77,8 +73,8 @@
     const pre = once(ensurePRE);
     if (!pre) return;
 
-    // if the code is larger than 10 KB, don't render
-    if (pre.textContent.length > 10 * 1000) return;
+    // if the code is larger than 50 KB, don't render
+    if (pre.textContent.length > 50 * 1000) return;
 
     const href = matchMedia('(prefers-color-scheme: dark)').matches
       ? 'https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/styles/github-dark.min.css'
