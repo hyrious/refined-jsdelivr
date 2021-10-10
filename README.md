@@ -15,6 +15,10 @@
 
 ## Changelog
 
+### 0.1.3
+
+- Highlight: redirect `.map` &rarr; `.json`, increase max size to 50 KB.
+
 ### 0.1.2
 
 - Terser: ignore codes larger than 1MB.
