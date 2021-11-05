@@ -7,7 +7,7 @@
 // @require     https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js
 // @require     https://cdn.jsdelivr.net/npm/terser@latest/dist/bundle.min.js
 // @grant       none
-// @version     0.1.3
+// @version     0.1.4
 // @author      hyrious
 // @description Adds syntax highlight and markdown rendering to jsDelivr CDN links.
 // ==/UserScript==
@@ -15,7 +15,7 @@
   const Features = {
     markdown: true,
     highlight: true,
-    terser: true,
+    terser: false, // TODO: move to worker
   };
 
   const _ = document;
@@ -57,7 +57,7 @@
       }
     });
 
-    const article = h('article', { innerHTML: marked(pre.textContent) });
+    const article = h('article', { innerHTML: marked.marked(pre.textContent) });
     article.classList.add('markdown-body');
     article.style.cssText = `
       padding: 1em;
