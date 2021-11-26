@@ -7,8 +7,9 @@
 // @require     https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.2.0/build/highlight.min.js
 // @require     https://cdn.jsdelivr.net/npm/terser@latest/dist/bundle.min.js
 // @grant       none
-// @version     0.1.4
+// @version     0.1.5
 // @author      hyrious
+// @run-at      document-start
 // @description Adds syntax highlight and markdown rendering to jsDelivr CDN links.
 // ==/UserScript==
 ;(async () => {
@@ -23,7 +24,14 @@
   const $$ = e => [..._.querySelectorAll(e)];
   const h = (t, a = {}) => Object.assign(document.createElement(t), a);
   const byteLength = s => new TextEncoder().encode(s).byteLength;
-  const { default: prettyBytes } = await import("https://jspm.dev/pretty-bytes");
+  const loaded = new Promise((resolve) => {
+    if (document.readyState === "loading") {
+      document.addEventListener('DOMContentLoaded', resolve)
+    } else {
+      resolve()
+    }
+  })
+
   let ext = location.pathname.match(/\.([^.]+)$/);
   ext && (ext = ext[1]);
 
@@ -41,14 +49,15 @@
   Features.highlight && applyHighlight();
   Features.terser    && applyTerser();
 
-  function applyMarkdown() {
-    const pre = once(ensurePRE);
-    if (!pre) return;
-
+  async function applyMarkdown() {
     if (!['md', 'markdown'].includes(ext)) return;
 
     const href = 'https://cdn.jsdelivr.net/gh/hyrious/github-markdown-css@main/github-markdown.css';
     _.head.append(h('link', { rel: 'stylesheet', href }));
+
+    await loaded;
+    const pre = once(ensurePRE);
+    if (!pre) return;
 
     marked.setOptions({
       highlight(code, lang) {
@@ -69,7 +78,8 @@
     _.body.append(article);
   }
 
-  function applyHighlight() {
+  async function applyHighlight() {
+    await loaded;
     const pre = once(ensurePRE);
     if (!pre) return;
 
@@ -85,8 +95,11 @@
     hljs.highlightElement(pre);
   }
 
-  function applyTerser() {
+  async function applyTerser() {
+    await loaded;
+
     let count = 0;
+    const { default: prettyBytes } = await import("https://jspm.dev/pretty-bytes");
     for (const tr of $$('tbody tr')) {
 
       let name = tr.querySelector('td.name');
