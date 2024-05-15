@@ -15,6 +15,19 @@
 
 ## Changelog
 
+### 0.1.6
+
+- Style matching latest chrome.
+
+### 0.1.5
+
+- Run at document-start.
+
+### 0.1.4
+
+- Marked.js: suppoert 4.0.
+- Terser: turn off by default.
+
 ### 0.1.3
 
 - Highlight: redirect `.map` &rarr; `.json`, increase max size to 50 KB.
